@@ -1,0 +1,60 @@
+from tkinter import *
+import sqlite3 as sq
+import datetime
+db=sq.connect("mm.")
+cursor=db.cursor()
+window = Tk()
+window.title("Registration")
+window.geometry( "800x600")
+header = Label(window, text="Fill up your details", font=("Times,",30,"bold"), fg="black").pack()
+L1 = Label(window, text = "Name", font=("Roman", 18)).place(x=10,y=100)
+L2 = Label(window, text = "Phone_number", font=("Roman",18)).place(x=10,y=150)
+L3 = Label(window, text = "email", font=("Roman",18)).place(x=10,y=200)
+L4 = Label(window, text = "address", font=("Roman",18)).place(x=10,y=250)
+L5 = Label(window, text = "Course", font=("Roman",18)).place(x=10,y=300)
+LL1=StringVar(window)
+LL1.set("--choose your course--")
+name1=StringVar(window)
+Phone_number1=StringVar(window)
+email1=StringVar(window)
+address1=StringVar(window)
+coursell={"python","advance python","java","selenium"}
+L1T = Entry(window, textvariable=name1)
+L1T.place(x=220,y=105)
+L2T = Entry(window, textvariable=Phone_number1)
+L2T.place(x=220,y=155)
+L3T = Entry(window, textvariable=email1)
+L3T.place(x=220,y=205)
+L4T = Entry(window, textvariable=address1)
+L4T.place(x=220,y=255)
+L5T=OptionMenu(window,LL1,*coursell)
+L5T.place(x=220,y=305)
+def rep():
+    print("the data has been stored")
+    cursor.execute("create table if not exists data (name string,phone_number string,email string,address string,"
+                   "course string)")
+    cursor.execute("insert into data (name ,phone_number,email,address,course) values(?,?,?,?,?)",(L1T.get(),L2T.get(),L3T.get(),L4T.get(),LL1.get(),))
+    db.commit()
+    name1.set('')
+    Phone_number1.set('')
+    email1.set('')
+    address1.set('')
+    LL1.set('--choose your course--')
+def clear():
+    name1.set('')
+    Phone_number1.set('')
+    email1.set('')
+    address1.set('')
+    LL1.set('--choose your course--')
+
+button_1 = Button(window, text="Submit",command=rep)
+button_1.place(x=100,y=400)
+
+button_2 = Button(window,text= "Clear",command=clear)
+button_2.place(x=10,y=400)
+
+window.mainloop()
+db.commit()
+cursor.close()
+db.close()
+
